@@ -25,6 +25,11 @@ class InoveltranslationParser extends Parser {
         return dom.querySelector("section[data-sentry-component='RichText']");
     }
 
+    customRawDomToContentStep(chapter, content) {
+        [...chapter.rawDom.body.querySelectorAll("div.rounded-xl")]
+            .forEach(c => content.appendChild(c));
+    }
+
     findChapterTitle(dom) {
         return dom.querySelector("h1");
     }
