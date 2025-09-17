@@ -62,14 +62,20 @@ class GlobalNovelpiaParser extends Parser {
     }
 
     async fetchChapter(url) {
-        let chapterId = url.split("/").pop();
-        let metaUrl = `https://api-global.novelpia.com/v1/novel/episode?episode_no=${chapterId}`;
-        let metaJson = (await HttpClient.fetchJson(metaUrl)).json;
-        let token = metaJson.result._t;
+        let dom = (await HttpClient.fetchHtml(url)).responseXML;
+        let chapTitle = [...dom.querySelectorAll("span.in-chapter-title")].map(a => a.textContent);
+        let token = this.findChapterContentToken(dom);
         let contentUrl = `https://api-global.novelpia.com/v1/novel/episode/content?_t=${token}`;
         let contentJson = (await HttpClient.fetchJson(contentUrl)).json;
-        return this.jsonToHtml(url, contentJson.result.data, metaJson.result.data.epi_title);
+        return this.jsonToHtml(url, contentJson.result.data, chapTitle);
     }
+
+    findChapterContentToken(dom) {
+        let regex = new RegExp("eyJhb[^\"]*");
+        let getToken = [...dom.querySelectorAll("script#__NUXT_DATA__")].map(a => a.outerHTML);
+        let chapToken = String(getToken).match(regex);
+        return chapToken;
+    }   
 
     jsonToHtml(pageUrl, data, title) {
         let newDoc = Parser.makeEmptyDocForContent(pageUrl);
