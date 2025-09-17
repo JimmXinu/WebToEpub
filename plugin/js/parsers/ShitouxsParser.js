@@ -34,6 +34,6 @@ class ShitouxsParser extends Parser {
     }
 
     getInformationEpubItemChildNodes(dom) {
-        return [...dom.querySelectorAll(".infos p")];
+        return [...dom.querySelectorAll(".bookintromore")];
     }
 }
