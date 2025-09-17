@@ -49,6 +49,17 @@ class EmpirenovelParser extends Parser { // eslint-disable-line no-unused-vars
         return dom.querySelector("#read-novel");
     }
 
+    extractAuthor(dom) {
+        let authorLabel = dom.querySelector("div:nth-child(2) > div > span > a");
+        return (authorLabel === null) ? super.extractAuthor(dom) : authorLabel.textContent;
+    }
+
+    extractSubject(dom) {
+        let tags = ([...dom.querySelectorAll("div:nth-child(1) > ul a")]);
+        let regex = new RegExp("^#");
+        return tags.map(e => e.textContent.trim().replace(regex, "")).join(", ");
+    }
+
     extractTitleImpl(dom) {
         return dom.querySelector("h1:not(.show_title)");
     }
@@ -56,7 +67,11 @@ class EmpirenovelParser extends Parser { // eslint-disable-line no-unused-vars
     findCoverImageUrl(dom) {
         return util.getFirstImgSrc(dom, "div.cover");
     }
+
     getInformationEpubItemChildNodes(dom) {
-        return [...dom.querySelectorAll("dl")];
+        return [
+            ...dom.querySelectorAll("div.col-sm.pe-sm-0 > div:nth-child(1)"),
+            ...dom.querySelectorAll("div.bg_dark.p-3.my-2.rounded-3.show_details.max-sm-250.w-100")
+        ];
     }
 }
