@@ -157,15 +157,3 @@ class ChrysanthemumgardenParser extends WordpressBaseParser {
         }
     }
 }
-
-class FontInfo extends ImageInfo {
-    constructor(fontName) {
-        super();
-        this.fontName = fontName;
-    }
-
-    packInEpub(zipWriter) {
-        zipWriter.add("OEBPS/Fonts/"+this.fontName,
-            new zip.BlobReader(new Blob([this.arraybuffer])));
-    }
-}
