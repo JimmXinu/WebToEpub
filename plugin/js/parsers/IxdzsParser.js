@@ -81,6 +81,9 @@ class Ixdzs8Parser extends IxdzsParser {
     }
 
     async fetchChapterUrls(url, options, baseUri) {
+        if (!baseUri.endsWith("/")) {
+            baseUri += "/";
+        }
         let json = (await HttpClient.fetchJson(url, options)).json;
         return json.data.map(d => ({
             sourceUrl: `${baseUri}p${d.ordernum}.html`,
