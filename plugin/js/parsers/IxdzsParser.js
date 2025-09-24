@@ -90,4 +90,23 @@ class Ixdzs8Parser extends IxdzsParser {
             title: d.title,
         }));
     }
+
+    async fetchChapter(url) {
+        let dom = (await HttpClient.wrapFetch(url)).responseXML;
+        let count = 0;
+        while (!this.findContent(dom)) {
+            let responseUrl = this.buildChallengeResponseUrl(dom, url);
+            dom = (await HttpClient.wrapFetch(responseUrl)).responseXML;
+            if (++count > 10) {
+                break;
+            }
+        }
+        return dom;
+    }
+
+    buildChallengeResponseUrl(dom, url) {
+        let script = dom.querySelector("script")?.textContent;
+        let token = script.split("\"")[1];
+        return url +"?challenge=" + encodeURIComponent(token);
+    }
 }
