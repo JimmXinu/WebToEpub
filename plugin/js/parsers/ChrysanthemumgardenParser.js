@@ -8,7 +8,7 @@ class ChrysanthemumgardenParser extends WordpressBaseParser {
         this.usedfonts = new Set();
     }
 
-    onStartCollecting(){
+    onStartCollecting() {
         this.usedfonts = new Set();
     }
 
