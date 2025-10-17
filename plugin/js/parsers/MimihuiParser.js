@@ -19,7 +19,8 @@ class MimihuiParser extends Parser {
         /* 
         Will need to handle VIP chapters and clean chapter titles. (Remove 免费 and VIP from the end of it. Only ToC is affected by this.)
 
-        We can still get a sneakpeek of the content of VIP chapters, ~10 lines. 
+        We can still get a sneakpeek of the content of VIP chapters even when locked, ~10 lines, so I didn't make them automatically non-includeable. 
+        With them being visible clearly in the ToC with a 'VIP' at the end, if user want to remove them. 
         */
     }
 
