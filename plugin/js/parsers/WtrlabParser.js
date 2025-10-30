@@ -25,10 +25,13 @@ class WtrlabParser extends Parser {
         this.slug = slug;
         let chapters = (await HttpClient.fetchJson("https://wtr-lab.com/api/chapters/" + id)).json;
         let serie_id = chapters.chapters[0].serie_id;
+        try {
+            let terms = (await HttpClient.fetchJson("https://wtr-lab.com/api/user/config")).json;
+            this.terms = terms?.config?.terms.filter(a => (a?.filter == null) || (a?.filter.includes(serie_id)));
 
-        let terms = (await HttpClient.fetchJson("https://wtr-lab.com/api/user/config")).json;
-        this.terms = terms?.config?.terms.filter(a => (a?.filter == null) || (a?.filter.includes(serie_id)));
-
+        } catch (error) {
+            this.terms = [];
+        }
         return chapters.chapters.map(a => ({
             sourceUrl: "https://wtr-lab.com/"+language+"/novel/"+id+"/"+slug+"/chapter-"+a.order, 
             title: (document.getElementById("removeChapterNumberCheckbox").checked)?a.title:a.order+": "+a.title
