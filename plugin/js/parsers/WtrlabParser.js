@@ -10,7 +10,9 @@ class WtrlabParser extends Parser {
 
     populateUIImpl() {
         document.getElementById("removeChapterNumberRow").hidden = false; 
-        document.getElementById("selectTranslationAiRow").hidden = false; 
+        // raw download no longer supported as the raw text is encoded and i don't know how.
+        // leaving old code in case it gets solved.
+        // document.getElementById("selectTranslationAiRow").hidden = false; 
     }
 
     async getChapterUrls(dom) {
@@ -63,7 +65,7 @@ class WtrlabParser extends Parser {
     findCoverImageUrl() {
         return this.img;
     }
-    
+
     extractSubject(dom) {
         let tagsgenre = [...dom.querySelectorAll("span.genre")].map(a => a.textContent);
         let tagstags = [...dom.querySelectorAll(".tags a.tag")].map(a => a.textContent.replace(",", ""));
