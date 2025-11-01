@@ -38,6 +38,14 @@ class WtrlabParser extends Parser {
         }));
     }
 
+
+    async loadEpubMetaInfo(dom) {
+        let json = dom.querySelector("script#__NEXT_DATA__")?.textContent;
+        json = JSON.parse(json);
+        this.img = json?.props.pageProps.serie.serie_data.data.image;
+        return;
+    }
+
     formatTitle(link) {
         let span = link.querySelector("span").textContent.trim();
         let num = link.querySelector("b").textContent.trim().replace("#", "");
@@ -52,9 +60,10 @@ class WtrlabParser extends Parser {
         return dom.querySelector("h1");
     }
 
-    findCoverImageUrl(dom) {
-        return util.getFirstImgSrc(dom, ".image-wrap");
+    findCoverImageUrl() {
+        return this.img;
     }
+    
     extractSubject(dom) {
         let tagsgenre = [...dom.querySelectorAll("span.genre")].map(a => a.textContent);
         let tagstags = [...dom.querySelectorAll(".tags a.tag")].map(a => a.textContent.replace(",", ""));
@@ -144,7 +153,7 @@ class WtrlabParser extends Parser {
 
     buildChapter(json, url) {
         let leaves = url.split("/");
-        let chapter = leaves[leaves.length - 1];
+        let chapter = leaves[leaves.length - 1].replace("chapter-","");
         let newDoc = Parser.makeEmptyDocForContent(url);
         let title = newDoc.dom.createElement("h1");
         title.textContent = ((document.getElementById("removeChapterNumberCheckbox").checked)?"":chapter+": ")+json.chapter.title;
